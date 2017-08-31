@@ -1,11 +1,40 @@
-@import 'chatrooms';
+@import 'pages';
+@import 'registrations';
 
 
 body{
   margin: 0;
-  background-color: #E9E9E5;
+  background-color: #F3F3F3;
+  font-family: helvetica;
 }
 
 h1, h2, h3, h4, h5, h6, p {
   margin: 0;
 }
+
+*:focus {
+  outline: none;
+}
+
+.flex {
+  display: flex;
+}
+
+.flex-between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.flex-around {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+

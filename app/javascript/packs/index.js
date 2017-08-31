@@ -1,1 +1,1 @@
-import '../chatroom/index.js'
+import '../app/index.js'

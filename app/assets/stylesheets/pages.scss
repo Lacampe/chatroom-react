@@ -1,3 +1,90 @@
-// Place all the styles related to the pages controller here.
-// They will automatically be included in application.css.
-// You can use Sass (SCSS) here: http://sass-lang.com/
+ /* layout */
+.app-container {
+  height: 100vh;
+  width: 100vw;
+}
+
+.left {
+  height: 100%;
+  width: 25%;
+}
+
+.center {
+  height: 100%;
+  width: 50%;
+}
+
+.right {
+  height: 100%;
+  width: 25%;
+}
+
+/* components */
+.checkbox {
+  height: 15px;
+  width: 15px;
+  margin-left: 10%;
+  background-color: white;
+  border: 1px solid #ADADAD;
+  border-radius: 5px;
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.search {
+  height: 40px;
+  width: 70%;
+  margin-top: 25%;
+  margin-left: 10%;
+  padding: 1px 20px;
+  border: none;
+  border-radius: 5px;
+  box-shadow: 2px 4px 8px #D8D8D8;
+  color: #464646;
+  font-weight: 400;
+  font-size: 14px;
+}
+.search::-webkit-input-placeholder {
+  color: #B2B2B2;
+  font-weight: 100;
+  font-size: 14px;
+}
+
+/* misc */
+.my-chatrooms {
+  height: 50px;
+  width: 100%;
+  align-items: center;
+  h6 {
+    color: #464646;
+    font-weight: 100;
+    font-size: 14px;
+    margin-left: 10px;
+  }
+}
+
+.ticked {
+  background-color: #91DA86;
+  border: 1px solid #91DA86;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

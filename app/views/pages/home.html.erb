@@ -1,0 +1,6 @@
+<%= content_tag :div,
+                class: 'hook',
+                chatrooms: @chatrooms.to_json,
+                current_user: current_user.to_json  do %><% end %>
+
+<%= javascript_pack_tag 'index' %>
