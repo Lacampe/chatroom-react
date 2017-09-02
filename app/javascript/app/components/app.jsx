@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import ChatroomCard from './chatroom_card';
 
 class App extends React.Component {
   constructor(props) {
@@ -51,6 +52,7 @@ class App extends React.Component {
             <div className={'checkbox ' + ticked} onClick={this.handleCheckbox.bind(this)}></div>
             <h6>My Chatrooms</h6>
           </div>
+          <div className='chatrooms-list'></div>
         </div>
 
         <div className='center'></div>
