@@ -36,12 +36,17 @@ class App extends React.Component {
   }
 
   render() {
-    console.log(this.state.chatrooms.length)
+    console.log();
 
     var ticked = '';
     if (this.state.isTicked) {
       ticked = 'ticked'
     }
+
+    var chatroomsList = [];
+    this.state.chatrooms.map((chatroom, index) => {
+      chatroomsList.push(<ChatroomCard key={chatroom.id}/>)
+    });
 
     return (
       <div className='app-container flex-around'>
@@ -52,7 +57,7 @@ class App extends React.Component {
             <div className={'checkbox ' + ticked} onClick={this.handleCheckbox.bind(this)}></div>
             <h6>My Chatrooms</h6>
           </div>
-          <div className='chatrooms-list'></div>
+          <div className='chatrooms-list flex-center'>{chatroomsList}</div>
         </div>
 
         <div className='center'></div>

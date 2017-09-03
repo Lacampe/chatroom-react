@@ -22,9 +22,18 @@
 .chatrooms-list {
   height: 75%;
   width: 100%;
+  overflow: scroll;
+  align-items: baseline !important;
 }
 
 /* components */
+.chatroom-card {
+  height: 75px;
+  width: 90%;
+  background-color: white;
+  border-radius: 5px;
+}
+
 .checkbox {
   height: 15px;
   width: 15px;
@@ -32,9 +41,7 @@
   background-color: white;
   border: 1px solid #ADADAD;
   border-radius: 5px;
-  &:hover {
-    cursor: pointer;
-  }
+  &:hover {cursor: pointer;}
 }
 
 .search {
