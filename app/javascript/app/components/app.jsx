@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import ChatroomCard from './chatroom_card';
+import Chatroom from './chatroom';
 
 class App extends React.Component {
   constructor(props) {
@@ -7,7 +8,8 @@ class App extends React.Component {
     this.state = {
       chatrooms: props.chatrooms,
       current_user: props.current_user,
-      isTicked: false
+      displayForm: false,
+      isTicked: false,
     };
   }
 
@@ -35,6 +37,10 @@ class App extends React.Component {
     // this.setState({ chatrooms: filteredChatrooms });
   }
 
+  handleDisplayForm() {
+    this.setState({ displayForm: !this.state.displayForm });
+  }
+
   render() {
     console.log();
 
@@ -60,7 +66,10 @@ class App extends React.Component {
           <div className='chatrooms-list flex-center'>{chatroomsList}</div>
         </div>
 
-        <div className='center'></div>
+        <div className='center'>
+          {<Chatroom  handleForm={this.handleDisplayForm.bind(this)}
+                      displayForm={this.state.displayForm}/>}
+        </div>
 
         <div className='right'></div>
 
