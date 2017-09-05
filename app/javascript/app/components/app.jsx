@@ -41,6 +41,10 @@ class App extends React.Component {
     this.setState({ displayForm: !this.state.displayForm });
   }
 
+  handleSubmitForm() {
+    this.setState({ displayForm: !this.state.displayForm });
+  }
+
   render() {
     console.log();
 
@@ -66,10 +70,11 @@ class App extends React.Component {
           <div className='chatrooms-list flex-center'>{chatroomsList}</div>
         </div>
 
-        <div className='center'>
-          {<Chatroom  handleForm={this.handleDisplayForm.bind(this)}
+
+          {<Chatroom  handleDisplay={this.handleDisplayForm.bind(this)}
+                      handleSubmit={this.handleSubmitForm.bind(this)}
                       displayForm={this.state.displayForm}/>}
-        </div>
+
 
         <div className='right'></div>
 
