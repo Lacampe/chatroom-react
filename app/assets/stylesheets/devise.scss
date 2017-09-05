@@ -1,0 +1,53 @@
+/* layout */
+.devise-container {
+  h1 {
+    font-size: 50px;
+    color: #464646;
+    width: 708px;
+    margin: 40px auto;
+  }
+}
+
+.devise-form-container {
+  width: 100%;
+}
+
+/* components */
+.devise-btn {
+  @extend .submit-btn;
+  color: white;
+  font-size: 18px;
+  font-family: helvetica;
+  font-weight: 600;
+  border: none;
+}
+
+.devise-form {
+  height: 500px;
+  width: 500px;
+  background-color: white;
+  box-shadow: 2px 4px 8px #D8D8D8;
+  border-radius: 5px;
+  h2 {
+    font-size: 28px;
+    color: #464646;
+    width: 103px;
+    margin: 30px auto;
+  }
+  form {
+    height: 365px;
+    padding: 0 50px;
+    justify-content: space-between;
+  }
+  label {
+    font-size: 15px;
+    font-weight: 100;
+    color: #CBCBCB;
+    margin-bottom: 5px;
+  }
+  input {
+    margin-top: 10px;
+  }
+}
+
+/* misc */
