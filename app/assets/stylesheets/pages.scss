@@ -19,9 +19,24 @@
   width: 25%;
 }
 
+
+
 .chatroom-container {
   height: 90%;
   width: 100%;
+}
+
+.chatroom-top {
+  height: 15%;
+}
+
+.chatroom-middle {
+  height: 70%;
+  background-color: #212430;
+}
+
+.chatroom-bottom {
+  height: 15%;
 }
 
 .chatrooms-list {
@@ -60,6 +75,15 @@
     color: #DC2525;
     cursor: pointer;
   }
+}
+
+.chatroom {
+  height: 90%;
+  width: 95%;
+  background-color: white;
+  border-radius: 5px;
+  box-shadow: 2px 4px 8px #D8D8D8;
+  margin: 0 auto;
 }
 
 .chatroom-card {

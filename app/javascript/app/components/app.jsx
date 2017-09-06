@@ -78,7 +78,7 @@ class App extends React.Component {
 
     var chatroomsList = [];
     this.state.chatrooms.map((chatroom, index) => {
-      chatroomsList.push(<ChatroomCard key={chatroom.id}/>)
+      chatroomsList.push(<ChatroomCard key={chatroom[0].id}/>)
     });
 
     return (

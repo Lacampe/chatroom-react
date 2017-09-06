@@ -40,7 +40,15 @@ class Chatroom extends Component {
         </div>
       )
     } else {
+      return (
+        <div className='chatroom'>
+          <div className='chatroom-top'>
 
+          </div>
+          <div className='chatroom-middle'></div>
+          <div className='chatroom-bottom'></div>
+        </div>
+      )
     }
   }
 
