@@ -46,7 +46,9 @@ class Chatroom extends Component {
 
           </div>
           <div className='chatroom-middle'></div>
-          <div className='chatroom-bottom'></div>
+          <div className='chatroom-bottom'>
+            <textarea onKeyDown={this.props.handleSend} id='message-form'/>
+          </div>
         </div>
       )
     }

@@ -19,7 +19,7 @@ class App extends React.Component {
     this.setState({ chatrooms: this.props.chatrooms }, () => {
       var filteredChatrooms = [];
       this.state.chatrooms.map((chatroom, index) => {
-        if (chatroom.name.toLowerCase().startsWith(searchInput)) {
+        if (chatroom[0].name.toLowerCase().startsWith(searchInput)) {
           filteredChatrooms.push(chatroom)
         }
       });
@@ -32,7 +32,7 @@ class App extends React.Component {
       if (this.state.isTicked) {
         var filteredChatrooms = [];
         this.state.chatrooms.map((chatroom, index) => {
-          if (chatroom.creator_id === this.state.current_user.id) {
+          if (chatroom[0].creator_id === this.state.current_user.id) {
             filteredChatrooms.push(chatroom)
           }
         });
@@ -48,20 +48,32 @@ class App extends React.Component {
     this.setState({ displayForm: !this.state.displayForm });
   }
 
+  handleSendMessage(event) {
+    if (event.keyCode === 13) {
+      event.preventDefault();
+
+      document.getElementById('message-form').value = '';
+    }
+  }
+
   handleSubmitForm() {
     const name = document.getElementById('name-input').value;
     const description = document.getElementById('description-input').value;
     const data = {
       name: name,
-      description: description,
-      creator_id: this.state.current_user.id
+      description: description
     }
+    const body = { chatroom: data }
+    body[Rails.csrfParam()] = Rails.csrfToken()
+    console.log(Rails.csrfParam());
+    console.log(Rails.csrfToken());
     fetch('/chatrooms', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ chatroom: data })
+      credentials: 'same-origin',
+      body: JSON.stringify(body)
     })
       .then(response => response.json())
       .then((data) => {
@@ -94,6 +106,7 @@ class App extends React.Component {
         </div>
         {<Chatroom  handleDisplay={this.handleDisplayForm.bind(this)}
                     handleSubmit={this.handleSubmitForm.bind(this)}
+                    handleSend={this.handleSendMessage.bind(this)}
                     activeChatroom={this.state.activeChatroom}
                     displayForm={this.state.displayForm}/>}
         <div className='right'></div>
