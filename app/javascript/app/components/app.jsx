@@ -6,6 +6,7 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      activeChatroom: props.chatrooms[0],
       chatrooms: props.chatrooms,
       current_user: props.current_user,
       displayForm: false,
@@ -27,14 +28,20 @@ class App extends React.Component {
   }
 
   handleCheckbox() {
-    this.setState({ isTicked: !this.state.isTicked });
-    // var filteredChatrooms = [];
-    // this.state.chatrooms.map((chatroom, index) => {
-    //   if (chatroom.creator_id === this.state.current_user.id) {
-    //     filteredChatrooms.push(chatroom)
-    //   }
-    // });
-    // this.setState({ chatrooms: filteredChatrooms });
+    this.setState({ isTicked: !this.state.isTicked }, () => {
+      if (this.state.isTicked) {
+        var filteredChatrooms = [];
+        this.state.chatrooms.map((chatroom, index) => {
+          if (chatroom.creator_id === this.state.current_user.id) {
+            filteredChatrooms.push(chatroom)
+          }
+        });
+        this.setState({ chatrooms: filteredChatrooms });
+      } else {
+        this.setState({ chatrooms: this.props.chatrooms });
+      }
+    });
+
   }
 
   handleDisplayForm() {
@@ -42,12 +49,28 @@ class App extends React.Component {
   }
 
   handleSubmitForm() {
+    const name = document.getElementById('name-input').value;
+    const description = document.getElementById('description-input').value;
+    const data = {
+      name: name,
+      description: description,
+      creator_id: this.state.current_user.id
+    }
+    fetch('/chatrooms', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ chatroom: data })
+    })
+      .then(response => response.json())
+      .then((data) => {
+        this.setState({ activeChatroom: data })
+      });
     this.setState({ displayForm: !this.state.displayForm });
   }
 
   render() {
-    console.log();
-
     var ticked = '';
     if (this.state.isTicked) {
       ticked = 'ticked'
@@ -69,13 +92,10 @@ class App extends React.Component {
           </div>
           <div className='chatrooms-list flex-center'>{chatroomsList}</div>
         </div>
-
-
-          {<Chatroom  handleDisplay={this.handleDisplayForm.bind(this)}
-                      handleSubmit={this.handleSubmitForm.bind(this)}
-                      displayForm={this.state.displayForm}/>}
-
-
+        {<Chatroom  handleDisplay={this.handleDisplayForm.bind(this)}
+                    handleSubmit={this.handleSubmitForm.bind(this)}
+                    activeChatroom={this.state.activeChatroom}
+                    displayForm={this.state.displayForm}/>}
         <div className='right'></div>
 
       </div>
