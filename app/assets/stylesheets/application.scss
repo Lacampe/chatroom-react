@@ -50,3 +50,13 @@ h1, h2, h3, h4, h5, h6, p {
   display: flex;
   flex-wrap: wrap;
 }
+
+.flex-start {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.flex-end {
+  display: flex;
+  justify-content: flex-end;
+}

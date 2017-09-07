@@ -3,8 +3,12 @@ class ChatroomsController < ApplicationController
     new_chatroom = Chatroom.new(chatroom_params)
     new_chatroom.creator = current_user
     new_chatroom.save
+    props = []
+    Chatroom.all.to_a.each do |chatroom|
+      props << [chatroom, chatroom.messages]
+    end
     respond_to do |format|
-      format.json { render json: new_chatroom }
+      format.json { render json: props }
     end
   end
 

@@ -1,12 +1,7 @@
 import React, { Component } from 'react';
+import Message from './message';
 
 class Chatroom extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-
-    };
-  }
 
   renderBtn() {
     if (!this.props.displayForm) {
@@ -19,6 +14,13 @@ class Chatroom extends Component {
   }
 
   renderChatroomOrForm() {
+    var messages = []
+    this.props.messages.map((message, index) => {
+      messages.push(<Message  key={message.id}
+                              body={message.body}
+                              sender={message.sender_id}
+                              current_user={this.props.current_user} />)
+    });
     if (this.props.displayForm) {
       return (
         <div className='creation-form'>
@@ -43,9 +45,11 @@ class Chatroom extends Component {
       return (
         <div className='chatroom'>
           <div className='chatroom-top'>
-
+          {this.props.activeChatroom[0].name}
           </div>
-          <div className='chatroom-middle'></div>
+          <div className='chatroom-middle'>
+            {messages}
+          </div>
           <div className='chatroom-bottom'>
             <textarea onKeyDown={this.props.handleSend} id='message-form'/>
           </div>

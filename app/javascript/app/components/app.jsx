@@ -82,8 +82,6 @@ class App extends React.Component {
     }
     const body = { chatroom: data }
     body[Rails.csrfParam()] = Rails.csrfToken()
-    console.log(Rails.csrfParam());
-    console.log(Rails.csrfToken());
     fetch('/chatrooms', {
       method: 'POST',
       headers: {
@@ -94,7 +92,8 @@ class App extends React.Component {
     })
       .then(response => response.json())
       .then((data) => {
-        this.setState({ activeChatroom: data })
+        this.setState({ activeChatroom: data[data.length - 1] });
+        this.setState({ chatrooms: data });
       });
     this.setState({ displayForm: !this.state.displayForm });
   }
@@ -104,12 +103,10 @@ class App extends React.Component {
     if (this.state.isTicked) {
       ticked = 'ticked'
     }
-
     var chatroomsList = [];
     this.state.chatrooms.map((chatroom, index) => {
-      chatroomsList.push(<ChatroomCard key={chatroom[0].id}/>)
+      chatroomsList.push(<ChatroomCard key={chatroom[0].id} name={chatroom[0].name} />)
     });
-
     return (
       <div className='app-container flex-around'>
 
@@ -125,7 +122,9 @@ class App extends React.Component {
                     handleSubmit={this.handleSubmitForm.bind(this)}
                     handleSend={this.handleSendMessage.bind(this)}
                     activeChatroom={this.state.activeChatroom}
-                    displayForm={this.state.displayForm}/>}
+                    displayForm={this.state.displayForm}
+                    messages={this.state.activeChatroom[1]}
+                    current_user={this.state.current_user} />}
         <div className='right'></div>
 
       </div>

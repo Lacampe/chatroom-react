@@ -5,7 +5,7 @@ class ChatroomCard extends React.Component {
   render() {
     return (
       <div className='chatroom-card'>
-
+        <p>{this.props.name}</p>
       </div>
     )
   }
