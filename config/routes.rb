@@ -5,6 +5,8 @@ Rails.application.routes.draw do
   devise_for :users,
     controllers: { registrations: 'registrations' }
 
-  resources :chatrooms, only: [ :create ]
+  resources :chatrooms, only: [ :create ] do
+    resources :messages, only: [ :create ]
+  end
 
 end
