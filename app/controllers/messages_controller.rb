@@ -8,6 +8,15 @@ class MessagesController < ApplicationController
     respond_to do |format|
       format.json { render json: props }
     end
+    ActionCable.server.broadcast(
+      'messages',
+      { id: new_message.id,
+        body: new_message.body,
+        chatroom_id: Chatroom.find(new_message.chatroom.id).id,
+        sender_id: new_message.sender.id,
+        created_at: new_message.created_at,
+        updated_at: new_message.updated_at }
+    )
   end
 
   private

@@ -1,4 +1,11 @@
 class ChatroomsController < ApplicationController
+  def show
+    props = [[Chatroom.find(params[:id]), Chatroom.find(params[:id]).messages], Chatroom.find(params[:id]).messages]
+    respond_to do |format|
+      format.json { render json: props }
+    end
+  end
+
   def create
     new_chatroom = Chatroom.new(chatroom_params)
     new_chatroom.creator = current_user

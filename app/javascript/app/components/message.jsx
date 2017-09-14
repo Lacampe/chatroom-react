@@ -7,7 +7,7 @@ class Message extends React.Component {
     (this.props.sender == this.props.current_user.id) ? sender = 'flex-end' : sender = 'flex-start'
     return(
       <div className={sender}>
-        <p>{this.props.body}</p>
+        <p style={{'color': 'white'}}>{this.props.body}</p>
       </div>
     )
   }

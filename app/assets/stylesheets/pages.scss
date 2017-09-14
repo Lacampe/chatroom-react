@@ -1,4 +1,4 @@
- /* layout */
+/* layout */
 .app-container {
   height: 100vh;
   width: 100vw;
@@ -7,6 +7,15 @@
 .left {
   height: 100%;
   width: 25%;
+  padding: 25px;
+  .top {
+    height: 10%;
+    width: 100%;
+  }
+  .bottom {
+    height: 90%;
+    width: 100%;
+  }
 }
 
 .center {
@@ -41,11 +50,9 @@
 }
 
 .chatrooms-list {
-  height: 75%;
+  height: 85%;
   width: 100%;
   overflow: scroll;
-  align-items: baseline !important;
-  flex-wrap: wrap;
 }
 
 .creation-container {
@@ -88,21 +95,56 @@
 }
 
 .chatroom-card {
-  height: 100px;
-  width: 90%;
+  height: 115px;
+  width: 95%;
   background-color: white;
   border-radius: 5px;
-  margin: 5px 0;
+  margin: 10px auto;
+  &:hover {
+    cursor: pointer;
+    box-shadow: 2px 4px 8px #E4E4E4;
+  }
+  .top {
+    height: 30%;
+    width: 100%;
+    align-items: center;
+    padding: 0 10px;
+  }
+  .name {
+    height: 23%;
+    width: 100%;
+    padding: 0 10px;
+    h3 {
+      color: #464646;
+      font-size: 18px;
+      font-weight: 500;
+    }
+  }
+  .description {
+    height: 27%;
+    width: 100%;
+    padding: 0 10px;
+    h5 {
+      color: #CBCBCB;
+      font-size: 12px;
+      font-weight: 100;
+    }
+  }
+  .bottom {
+    height: 20%;
+    width: 100%;
+    padding: 0 10px;
+  }
 }
 
 .checkbox {
-  height: 15px;
-  width: 15px;
-  margin-left: 10%;
+  height: 14px;
+  width: 14px;
+  margin-left: 15px;
   background-color: white;
   border: 1px solid #ADADAD;
-  border-radius: 5px;
-  &:hover {cursor: pointer;}
+  border-radius: 4px;
+  &:hover { cursor: pointer }
 }
 
 .creation-btn {
@@ -139,15 +181,54 @@
   }
 }
 
+.join-badge {
+  background-color: #91DA86;
+  border-radius: 5px;
+  border: 1px solid #91DA86;
+  padding: 3px 8px;
+  &:hover {
+    cursor: pointer;
+  }
+  p, i {
+    color: white;
+  }
+  i {
+    margin-right: 2px;
+    font-size: 11px;
+  }
+  p {
+    margin-left: 2px;
+    font-size: 12px;
+  }
+}
+
+.member-badge {
+  background-color: #F3F3F3;
+  border-radius: 5px;
+  border: 1px solid #C1C1C1;
+  padding: 3px 8px;
+  &:hover {
+    cursor: default;
+  }
+  p, i {
+    color: #B2B2B2;
+    font-size: 12px;
+    font-weight: 100;
+  }
+  i { margin-right: 2px }
+  p { margin-left: 2px }
+}
+
 .search {
-  height: 40px;
-  width: 70%;
-  margin-top: 25%;
-  margin-left: 10%;
-  padding: 1px 20px;
+  height: 50px;
+  width: 95%;
+  box-sizing: border-box;
+  padding: 0 20px;
+  margin: 0 auto;
+  display: block;
   border: none;
   border-radius: 5px;
-  box-shadow: 2px 4px 8px #D8D8D8;
+  box-shadow: 2px 4px 8px #E4E4E4;
   color: #383838;
   font-weight: 400;
   font-size: 14px;
@@ -165,21 +246,66 @@
 }
 
 /* misc */
+.active {
+  color: #91DA86;
+  font-size: 14px;
+  margin-right: 10px;
+}
+
+.creator p {
+  color: #CBCBCB;
+  font-size: 10px;
+  font-weight: 100;
+}
+
+.fa-power-off {
+  font-size: 20px;
+  color: #D4D4D4;
+  &:hover {
+    color: #EC5858;
+    cursor: pointer;
+  }
+}
+
+.members-count {
+  color: #464646;
+  i {
+    font-size: 12px;
+    margin-right: 5px;
+  }
+  h6 {
+    font-size: 11px;
+    font-weight: 100;
+  }
+}
+
 .my-chatrooms {
-  height: 50px;
   width: 100%;
+  margin: 15px 0;
   align-items: center;
   h6 {
-    color: #464646;
+    color: #383838;
     font-weight: 100;
-    font-size: 14px;
+    font-size: 13px;
     margin-left: 10px;
+  }
+}
+
+.not-a-member {
+  background-color: #E1E1E1;
+  &:hover {
+    cursor: default;
+  }
+  h5 {
+    color: #868686 !important;
+  }
+  .creator p {
+    color: #868686 !important;
   }
 }
 
 .ticked {
   background-color: #91DA86;
-  border: 1px solid #91DA86;
 }
 
 
