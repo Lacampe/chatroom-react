@@ -9,6 +9,10 @@ class ChatroomSubscriptionsController < ApplicationController
     respond_to do |format|
       format.json { render json: props }
     end
+    ActionCable.server.broadcast(
+      'chatroom_subscriptions',
+      props
+    )
   end
 
   private

@@ -53,6 +53,7 @@ class App extends React.Component {
         .then((data) => {
           this.setState({ activeChatroom: data[0], activeChatroomMessages: data[1] })
       });
+      document.title = chatroom[0].name + ' 💬'
     }
   }
 
@@ -96,7 +97,7 @@ class App extends React.Component {
     })
     .then(response => response.json())
     .then((data) => {
-      this.setState({ chatrooms: data });
+      // this.setState({ chatrooms: data });
       this.setState({ activeChatroom: chatroom });
     })
   }
@@ -161,6 +162,7 @@ class App extends React.Component {
         this.setState({ chatrooms: data });
       });
     this.setState({ displayForm: !this.state.displayForm });
+    document.title = this.state.activeChatroom[0].name + ' 💬'
   }
 
   render() {
@@ -181,7 +183,10 @@ class App extends React.Component {
     });
 
     window.onload = () => {
+      document.title = this.state.activeChatroom[0].name + ' 💬'
+
       const cable = ActionCable.createConsumer('ws://localhost:3000/cable');
+      // Messages channel
       cable.subscriptions.create('MessagesChannel', {
         connected: () => {
           console.log('Connected to MessagesChannel')
@@ -191,6 +196,15 @@ class App extends React.Component {
           if (this.state.activeChatroom[0].id == data.chatroom_id) {
             this.setState({ activeChatroomMessages: activeChatroomMessages.concat(data) })
           }
+        }
+      });
+      // Chatroom subscriptions channel
+      cable.subscriptions.create('ChatroomSubscriptionsChannel', {
+        connected: () => {
+          console.log('Connected to ChatroomSubscriptionsChannel')
+        },
+        received: (data) => {
+          this.setState({ chatrooms: data });
         }
       });
     }
