@@ -143,27 +143,29 @@ class App extends React.Component {
   }
 
   handleSendMessage(event) {
-    if ((event.keyCode === 13) || (event.type === 'click')) {
-      event.preventDefault();
-      const message = document.getElementById('message-form').value;
-      const data = {
-        body: message
-      }
-      const body = { message: data }
-      body[Rails.csrfParam()] = Rails.csrfToken()
-      fetch('chatrooms/' + this.state.activeChatroom[0].id + '/messages', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        credentials: 'same-origin',
-        body: JSON.stringify(body)
-      })
-        .then(response => response.json())
-        .then((data) => {
-          // this.setState({ activeChatroom: data });
+    if (document.getElementById('message-form').value !== '') {
+      if ((event.keyCode === 13) || (event.type === 'click')) {
+        event.preventDefault();
+        const message = document.getElementById('message-form').value;
+        const data = {
+          body: message
+        }
+        const body = { message: data }
+        body[Rails.csrfParam()] = Rails.csrfToken()
+        fetch('chatrooms/' + this.state.activeChatroom[0].id + '/messages', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          credentials: 'same-origin',
+          body: JSON.stringify(body)
         })
-      document.getElementById('message-form').value = '';
+          .then(response => response.json())
+          .then((data) => {
+            // this.setState({ activeChatroom: data });
+          })
+        document.getElementById('message-form').value = '';
+      }
     }
   }
 

@@ -68,6 +68,8 @@
 .chatroom-middle {
   height: 70%;
   overflow: scroll;
+  overflow-x: hidden;
+  padding: 25px 25px 0 25px;
 }
 
 .chatroom-bottom {
@@ -113,6 +115,11 @@
   align-items: center;
 }
 
+.bubble-info {
+  align-items: center;
+  margin-bottom: 7px;
+}
+
 /* components */
 .back-btn {
   color: #E4E4E4;
@@ -121,6 +128,29 @@
   &:hover {
     color: #DC2525;
     cursor: pointer;
+  }
+}
+
+.bubble {
+  border-radius: 5px;
+  margin: 5px 0;
+  padding: 4px 6px;
+  min-width: 115px;
+  max-width: 235px;
+  color: #373333;
+  h6 {
+    margin-left: 5px;
+    padding-top: 1px;
+    font-size: 12px;
+    font-weight: 400;
+  }
+  p {
+    font-size: 13px;
+    font-weight: 100;
+  }
+  img {
+    height: 14px;
+    width: 14px;
   }
 }
 
@@ -174,6 +204,11 @@
     width: 100%;
     padding: 0 10px;
   }
+}
+
+.chatroom-line {
+  flex: 0 0 40%;
+  border-top: 1px solid #979797;
 }
 
 .checkbox {
@@ -302,6 +337,17 @@
   margin-right: 10px;
 }
 
+.chatroom-date {
+  color: #979797;
+  font-size: 11px;
+  font-weight: 100;
+}
+
+.chatroom-time {
+  font-size: 10px !important;
+  font-weight: 100;
+}
+
 .creator p {
   color: #CBCBCB;
   font-size: 10px;
@@ -368,12 +414,13 @@
   background-color: #91DA86;
 }
 
+#self {
+  background-color: #C7EAC1;
+}
 
-
-
-
-
-
+#others {
+  background-color: #CFE5EE;
+}
 
 
 

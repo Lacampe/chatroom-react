@@ -35,7 +35,9 @@ class Chatroom extends Component {
       messages.push(<Message  key={message.id}
                               body={message.body}
                               sender={message.sender_id}
-                              current_user={this.props.current_user} />)
+                              current_user={this.props.current_user}
+                              message={message}
+                              previousMessage={this.props.messages[index - 1]} />)
     });
 
     var tooltipMessage = '';
