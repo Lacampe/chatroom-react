@@ -12,8 +12,8 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      activeChatroom: props.chatrooms[0],
-      activeChatroomMessages: props.chatrooms[0][1],
+      activeChatroom: props.default_active_chatroom,
+      activeChatroomMessages: props.default_active_chatroom[1],
       chatrooms: props.chatrooms,
       current_user: props.current_user,
       displayForm: false,
@@ -51,7 +51,7 @@ class App extends React.Component {
       })
         .then(response => response.json())
         .then((data) => {
-          this.setState({ activeChatroom: data[0], activeChatroomMessages: data[1] })
+          this.setState({ activeChatroom: data, activeChatroomMessages: data[1] })
       });
       document.title = chatroom[0].name + ' 💬'
     }
@@ -73,6 +73,45 @@ class App extends React.Component {
       }
     });
 
+  }
+
+  // Destroy chatroom if creator; Unsubscribe from chatroom if member
+  handleDestroyOrUnsubscribe(chatroom) {
+    if (this.state.current_user.id === chatroom[3].id) {
+      const body = {};
+      body[Rails.csrfParam()] = Rails.csrfToken()
+      fetch('chatrooms/' + chatroom[0].id, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        credentials: 'same-origin',
+        body: JSON.stringify(body)
+      })
+        .then(response => response.json())
+        .then((data) => {
+          this.setState({ activeChatroom: data, activeChatroomMessages: data[1] })
+          document.title = this.state.activeChatroom[0].name + ' 💬'
+        })
+    } else {
+      const body = { chatroom_id: chatroom[0].id }
+      body[Rails.csrfParam()] = Rails.csrfToken()
+      fetch('chatroom_subscriptions/unsubscribe', {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        credentials: 'same-origin',
+        body: JSON.stringify(body)
+      })
+        .then(response => response.json())
+        .then((data) => {
+          this.setState({ activeChatroom: data, activeChatroomMessages: data[1] })
+          document.title = this.state.activeChatroom[0].name + ' 💬'
+        })
+    }
   }
 
   handleDisplayForm() {
@@ -98,12 +137,13 @@ class App extends React.Component {
     .then(response => response.json())
     .then((data) => {
       // this.setState({ chatrooms: data });
-      this.setState({ activeChatroom: chatroom });
+      this.setState({ activeChatroom: data, activeChatroomMessages: data[1] });
+      document.title = this.state.activeChatroom[0].name + ' 💬'
     })
   }
 
   handleSendMessage(event) {
-    if (event.keyCode === 13) {
+    if ((event.keyCode === 13) || (event.type === 'click')) {
       event.preventDefault();
       const message = document.getElementById('message-form').value;
       const data = {
@@ -207,6 +247,15 @@ class App extends React.Component {
           this.setState({ chatrooms: data });
         }
       });
+      // Chatrooms channel
+      cable.subscriptions.create('ChatroomsChannel', {
+        connected: () => {
+          console.log('Connected to ChatroomsChannel')
+        },
+        received: (data) => {
+          this.setState({ chatrooms: data })
+        }
+      });
     }
 
     return (
@@ -235,6 +284,7 @@ class App extends React.Component {
         {<Chatroom  handleDisplay={this.handleDisplayForm.bind(this)}
                     handleSubmit={this.handleSubmitForm.bind(this)}
                     handleSend={this.handleSendMessage.bind(this)}
+                    handleDestroyOrUnsubscribe={this.handleDestroyOrUnsubscribe.bind(this, this.state.activeChatroom)}
                     activeChatroom={this.state.activeChatroom}
                     displayForm={this.state.displayForm}
                     messages={this.state.activeChatroomMessages}

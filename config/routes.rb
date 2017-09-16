@@ -10,6 +10,9 @@ Rails.application.routes.draw do
     resources :chatroom_subscriptions, only: [ :create ]
   end
 
+  resources :chatrooms, only: [ :destroy ]
+  delete 'chatroom_subscriptions/unsubscribe', to: 'chatroom_subscriptions#destroy'
+
   mount ActionCable.server => '/cable'
 
 end

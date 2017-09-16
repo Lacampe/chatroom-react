@@ -38,14 +38,15 @@
 
 .chatroom-top {
   height: 15%;
-  padding: 25px 25px 10px 25px;
+  padding: 25px 25px 0 25px;
   p {
     color: #D64B5C;
     font-size: 18px;
     font-weight: 600;
     background-color: #CFCED6;
     border-radius: 50%;
-    padding: 5px 8px;
+    padding: 5px 9px;
+    margin-left: 25px;
     &:hover {cursor: pointer}
   }
 }
@@ -71,6 +72,14 @@
 
 .chatroom-bottom {
   height: 15%;
+  padding: 25px 35px 25px 25px;
+  position: relative;
+  i {
+    color: #91DA86;
+    font-size: 25px;
+    transform: rotate(15deg);
+    &:hover {cursor: pointer}
+  }
 }
 
 .chatrooms-list {
@@ -249,6 +258,17 @@
   p { margin-left: 2px }
 }
 
+#message-form {
+  height: 100%;
+  width: 80%;
+  background-color: #212430;
+  border: none;
+  resize: none;
+  color: #B2B2B2;
+  font-size: 18px;
+  font-weight: 100;
+}
+
 .search {
   height: 50px;
   width: 95%;
@@ -286,6 +306,16 @@
   color: #CBCBCB;
   font-size: 10px;
   font-weight: 100;
+}
+
+.emoji-icon {
+  height: 20px;
+  width: 20px;
+  position: relative;
+  bottom: 12px;
+  &:hover {
+    cursor: pointer;
+  }
 }
 
 .fa-power-off {

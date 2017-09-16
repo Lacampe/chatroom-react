@@ -1,9 +1,16 @@
 import React, { Component } from 'react';
 import Message from './message';
+import { Picker } from 'emoji-mart';
 import { Tooltip } from 'react-tippy';
-import 'react-tippy/dist/tippy.css';
 
 class Chatroom extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      showPicker: false
+    }
+  }
+
   renderBtn() {
     if (!this.props.displayForm) {
       return (
@@ -12,6 +19,14 @@ class Chatroom extends Component {
         </div>
       )
     }
+  }
+
+  addEmoji(emoji) {
+    document.getElementById('message-form').value += `${emoji.native}`;
+  }
+
+  togglePicker() {
+    this.setState({ showPicker: !this.state.showPicker })
   }
 
   renderChatroomOrForm() {
@@ -66,14 +81,22 @@ class Chatroom extends Component {
                   </div>
                 )}
                 trigger='mouseenter' >
-              <p>X</p>
+              <p onClick={this.props.handleDestroyOrUnsubscribe}>X</p>
             </Tooltip>
           </div>
           <div className='chatroom-middle'>
             {messages}
           </div>
-          <div className='chatroom-bottom'>
-            <textarea onKeyDown={this.props.handleSend} id='message-form'/>
+          <div className='chatroom-bottom flex-between'>
+            <textarea onKeyDown={this.props.handleSend} id='message-form' placeholder='Type a message, @username...' />
+            {this.state.showPicker &&
+              <Picker set='apple'
+                      color='#91DA86'
+                      emojiSize={22}
+                      perLine={7}
+                      onClick={this.addEmoji} />}
+            <img src='emoji-icon.png' className='emoji-icon' onClick={this.togglePicker.bind(this)}/>
+            <i className='fa fa-paper-plane' onClick={this.props.handleSend}></i>
           </div>
         </div>
       )
