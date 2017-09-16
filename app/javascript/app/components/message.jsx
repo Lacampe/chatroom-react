@@ -41,7 +41,7 @@ class Message extends React.Component {
             <div className='bubble-info flex-between'>
               <div className='flex'>
                 <img src='user.png' />
-                <h6>@{this.props.message.sender_id}</h6>
+                <h6>@{this.props.message.username}</h6>
               </div>
               <p className='chatroom-time'>{messageTime.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</p>
             </div>

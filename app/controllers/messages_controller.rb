@@ -2,6 +2,7 @@ class MessagesController < ApplicationController
   def create
     new_message = Message.new(message_params)
     new_message.sender = current_user
+    new_message.username = current_user.username
     new_message.chatroom = Chatroom.find(params[:chatroom_id])
     new_message.save
     props = [new_message.chatroom, new_message.chatroom.messages]
