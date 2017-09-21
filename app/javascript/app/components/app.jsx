@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import ActionCable from 'actioncable';
 import ChatroomCard from './chatroom_card';
 import Chatroom from './chatroom';
+import MemberCard from './member_card';
 
 // chatroom[0] = chatroom
 // chatroom[1] = chatroom messages
@@ -12,6 +13,7 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      online_users: [],
       activeChatroom: props.default_active_chatroom,
       activeChatroomMessages: props.default_active_chatroom[1],
       chatrooms: props.chatrooms,
@@ -224,6 +226,23 @@ class App extends React.Component {
                                         handleJoinChatroom={this.handleJoinChatroom.bind(this, chatroom)} />)
     });
 
+    // Member cards list build
+    var onlineMembersList = [];
+    var offlineMembersList = [];
+    var onlineUsersIds = [];
+    this.state.online_users.map((user, index) => {
+      onlineUsersIds.push(user.id)
+    })
+    setTimeout(
+      this.state.activeChatroom[2].map((member, index) => {
+        if (onlineUsersIds.includes(member.id)) {
+          onlineMembersList.push(<MemberCard key={member.id} username={member.username} online={true} />)
+        } else {
+          offlineMembersList.push(<MemberCard key={member.id} username={member.username} online={false} />)
+        }
+      }
+    ), 1000)
+
     window.onload = () => {
       document.title = this.state.activeChatroom[0].name + ' 💬'
 
@@ -237,6 +256,7 @@ class App extends React.Component {
           const activeChatroomMessages = this.state.activeChatroomMessages;
           if (this.state.activeChatroom[0].id == data.chatroom_id) {
             this.setState({ activeChatroomMessages: activeChatroomMessages.concat(data) })
+            document.querySelector('.chatroom-middle').lastChild.scrollIntoView(true)
           }
         }
       });
@@ -246,7 +266,7 @@ class App extends React.Component {
           console.log('Connected to ChatroomSubscriptionsChannel')
         },
         received: (data) => {
-          this.setState({ chatrooms: data });
+          this.setState({ chatrooms: data[0], activeChatroom: data[1] });
         }
       });
       // Chatrooms channel
@@ -258,7 +278,53 @@ class App extends React.Component {
           this.setState({ chatrooms: data })
         }
       });
+      // Users channel
+      cable.subscriptions.create('UsersChannel', {
+        connected: () => {
+          console.log('Connected to UsersChannel')
+          const data = {
+            user_id: this.state.current_user.id
+          }
+          const body = { user: data }
+          body[Rails.csrfParam()] = Rails.csrfToken()
+          fetch('go_online', {
+            method: 'PATCH',
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json'
+            },
+            credentials: 'same-origin',
+            body: JSON.stringify(body)
+          })
+        },
+        received: (data) => {
+          this.setState({ online_users: data })
+        }
+      });
+      // Scroll down to last message
+      document.querySelector('.chatroom-middle').lastChild.scrollIntoView(true);
     }
+
+    window.onbeforeunload = () => {
+      const data = {
+        user_id: this.state.current_user.id
+      }
+      const body = { user: data }
+      body[Rails.csrfParam()] = Rails.csrfToken()
+      fetch('go_offline', {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        credentials: 'same-origin',
+        body: JSON.stringify(body)
+      })
+    }
+
+    // this.state.activeChatroomMessages.forEach((message) => {
+    //   console.log(message.body.includes('@' + this.state.current_user.username.toLowerCase()))
+    // });
 
     return (
       <div className='app-container flex'>
@@ -292,7 +358,19 @@ class App extends React.Component {
                     messages={this.state.activeChatroomMessages}
                     current_user={this.state.current_user} />}
         {/* Right container */}
-        <div className='right'></div>
+        <div className='right'>
+          <div className='top'>
+
+          </div>
+          <div className='flex members-header'>
+            <i className="fa fa-users" aria-hidden="true"></i>
+            <h3>Members</h3>
+          </div>
+          <div className='members-container'>
+            {onlineMembersList}
+            {offlineMembersList}
+          </div>
+        </div>
 
       </div>
     )

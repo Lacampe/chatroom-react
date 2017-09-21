@@ -67,7 +67,7 @@ class ChatroomCard extends React.Component {
         {/* Creator & members */}
         <div className='bottom flex-between'>
           <div className='creator'>
-            <p>created by <b><em>@{this.props.chatroom[3].username}</em></b></p>
+            <p>created by <b><em>@{this.props.chatroom[3].username.toLowerCase()}</em></b></p>
           </div>
           <div className='members-count flex-center'>
             <i className="fa fa-users" aria-hidden="true"></i>

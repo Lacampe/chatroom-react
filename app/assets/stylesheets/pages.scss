@@ -29,6 +29,10 @@
 .right {
   height: 100%;
   width: 25%;
+  padding: 25px 25px 25px 0;
+  .top {
+    height: 22%;
+  }
 }
 
 .chatroom-container {
@@ -120,6 +124,11 @@
   margin-bottom: 7px;
 }
 
+.members-container {
+  height: 70%;
+  width: 100%;
+}
+
 /* components */
 .back-btn {
   color: #E4E4E4;
@@ -138,14 +147,19 @@
   min-width: 115px;
   max-width: 235px;
   color: #373333;
-  h6 {
+  h5 {
     margin-left: 5px;
     padding-top: 1px;
     font-size: 12px;
     font-weight: 400;
   }
-  p {
+  h6 {
     font-size: 13px;
+    font-weight: 100;
+    margin-left: 20px;
+  }
+  p {
+    font-size: 14px;
     font-weight: 100;
   }
   img {
@@ -293,6 +307,23 @@
   p { margin-left: 2px }
 }
 
+.member-card {
+  width: 90%;
+  margin: 15px auto;
+  align-items: center;
+  color: #464646;
+  p {
+    font-size: 15px;
+    font-weight: 100;
+    margin-left: 10px;
+  }
+  img {
+    height: 17px;
+    width: 17px;
+    margin-left: 10px;
+  }
+}
+
 #message-form {
   height: 100%;
   width: 80%;
@@ -422,9 +453,36 @@
   background-color: #CFE5EE;
 }
 
+.members-header {
+  width: 90%;
+  margin: 0 auto;
+  align-items: center;
+  padding-bottom: 10px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #464646;
+  color: #464646;
+  i {
+    font-size: 20px;
+  }
+  h3 {
+    font-size: 18px;
+    font-weight: 400;
+    margin-left: 10px;
+  }
+}
 
+.online {
+  height: 11px;
+  width: 11px;
+  background-color: #91DA86;
+  border-radius: 50%;
+}
 
-
+.offline {
+  height: 11px;
+  width: 11px;
+  border-radius: 50%;
+}
 
 
 

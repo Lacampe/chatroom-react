@@ -15,6 +15,7 @@ class MessagesController < ApplicationController
         body: new_message.body,
         chatroom_id: Chatroom.find(new_message.chatroom.id).id,
         sender_id: new_message.sender.id,
+        username: new_message.username,
         created_at: new_message.created_at,
         updated_at: new_message.updated_at }
     )

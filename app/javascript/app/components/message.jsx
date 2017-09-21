@@ -41,9 +41,9 @@ class Message extends React.Component {
             <div className='bubble-info flex-between'>
               <div className='flex'>
                 <img src='user.png' />
-                <h6>@{this.props.message.username}</h6>
+                <h5>@{this.props.message.username.toLowerCase()}</h5>
               </div>
-              <p className='chatroom-time'>{messageTime.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</p>
+              <h6 className='chatroom-time'>{messageTime.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</h6>
             </div>
             <div className='flex-wrap' style={{'wordBreak': 'break-all'}}>
               <p>{this.props.body}</p>

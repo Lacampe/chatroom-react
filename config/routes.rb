@@ -12,6 +12,8 @@ Rails.application.routes.draw do
 
   resources :chatrooms, only: [ :destroy ]
   delete 'chatroom_subscriptions/unsubscribe', to: 'chatroom_subscriptions#destroy'
+  patch 'go_online', to: 'users#go_online'
+  patch 'go_offline', to: 'users#go_offline'
 
   mount ActionCable.server => '/cable'
 

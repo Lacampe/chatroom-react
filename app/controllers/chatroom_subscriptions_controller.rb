@@ -12,7 +12,7 @@ class ChatroomSubscriptionsController < ApplicationController
     end
     ActionCable.server.broadcast(
       'chatroom_subscriptions',
-      props
+      [props, active_chatroom]
     )
   end
 
@@ -30,9 +30,11 @@ class ChatroomSubscriptionsController < ApplicationController
     Chatroom.all.to_a.each do |chatroom|
       props << [chatroom, chatroom.messages, chatroom.members, chatroom.creator]
     end
+    chatroom = Chatroom.find(params[:chatroom_id])
+    active_chatroom = [chatroom, chatroom.messages, chatroom.members, chatroom.creator]
     ActionCable.server.broadcast(
       'chatroom_subscriptions',
-      props
+      [props, active_chatroom]
     )
   end
 
