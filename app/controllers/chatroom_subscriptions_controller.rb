@@ -12,7 +12,7 @@ class ChatroomSubscriptionsController < ApplicationController
     end
     ActionCable.server.broadcast(
       'chatroom_subscriptions',
-      [props, active_chatroom]
+      [props, active_chatroom, current_user.id]
     )
   end
 
@@ -30,11 +30,15 @@ class ChatroomSubscriptionsController < ApplicationController
     Chatroom.all.to_a.each do |chatroom|
       props << [chatroom, chatroom.messages, chatroom.members, chatroom.creator]
     end
-    chatroom = Chatroom.find(params[:chatroom_id])
-    active_chatroom = [chatroom, chatroom.messages, chatroom.members, chatroom.creator]
+    if current_user.chatrooms.count > 0
+      chatroom = current_user.chatrooms.first
+      active_chatroom = [chatroom, chatroom.messages, chatroom.members, chatroom.creator]
+    else
+      active_chatroom = nil
+    end
     ActionCable.server.broadcast(
       'chatroom_subscriptions',
-      [props, active_chatroom]
+      [props, active_chatroom, current_user.id]
     )
   end
 

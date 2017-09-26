@@ -3,6 +3,7 @@ import ActionCable from 'actioncable';
 import ChatroomCard from './chatroom_card';
 import Chatroom from './chatroom';
 import MemberCard from './member_card';
+import NotificationCard from './notification_card';
 
 // chatroom[0] = chatroom
 // chatroom[1] = chatroom messages
@@ -14,11 +15,14 @@ class App extends React.Component {
     super(props);
     this.state = {
       online_users: [],
+      noActiveChatroom: false,
       activeChatroom: props.default_active_chatroom,
       activeChatroomMessages: props.default_active_chatroom[1],
       chatrooms: props.chatrooms,
       current_user: props.current_user,
+      notifications: props.notifications,
       displayForm: false,
+      displayNotifications: false,
       isTicked: false,
     };
   }
@@ -54,6 +58,7 @@ class App extends React.Component {
         .then(response => response.json())
         .then((data) => {
           this.setState({ activeChatroom: data, activeChatroomMessages: data[1] })
+          document.querySelector('.chatroom-middle').lastChild.scrollIntoView(true);
       });
       document.title = chatroom[0].name + ' 💬'
     }
@@ -209,6 +214,70 @@ class App extends React.Component {
     document.title = this.state.activeChatroom[0].name + ' 💬'
   }
 
+  displayNotificationsBadge() {
+    var count = 0;
+    this.state.notifications.forEach((notification) => {
+      if (notification[5] === false) {
+        count += 1
+      }
+    });
+    if (count > 0) {
+      return (
+        <div className='notification-badge flex-center'>
+          <p>{count}</p>
+        </div>
+      )
+    }
+  }
+
+  displayNotifications() {
+    this.setState({ displayNotifications: !this.state.displayNotifications })
+  }
+
+  handleMarkAllAsRead() {
+    const body = {};
+    body[Rails.csrfParam()] = Rails.csrfToken()
+    fetch('notifications/mark_all_as_read', {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      credentials: 'same-origin',
+      body: JSON.stringify(body)
+    })
+      .then(response => response.json())
+      .then((data) => {
+        this.setState({ notifications: data })
+      });
+  }
+
+  handleClearAll() {
+    const body = {};
+    body[Rails.csrfParam()] = Rails.csrfToken()
+    fetch('notifications/clear_all', {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      credentials: 'same-origin',
+      body: JSON.stringify(body)
+    })
+      .then(response => response.json())
+      .then((data) => {
+        this.setState({ notifications: data })
+      });
+  }
+
+  handleMentionOnClick(username) {
+    document.getElementById('message-form').value += `@${username}`;
+  }
+
+  componentWillMount() {
+    if (this.state.activeChatroom === null) this.setState({ noActiveChatroom: true })
+  }
+
   render() {
     var ticked = '';
     if (this.state.isTicked) {
@@ -226,6 +295,15 @@ class App extends React.Component {
                                         handleJoinChatroom={this.handleJoinChatroom.bind(this, chatroom)} />)
     });
 
+    // Notifications cards list build
+    var notificationsList = [];
+    this.state.notifications.map((notification, index) => {
+      notificationsList.unshift(<NotificationCard key={notification[0].id}
+                                                  notifier={notification[1]}
+                                                  chatroom={notification[3]}
+                                                  category={notification[4]} />)
+    });
+
     // Member cards list build
     var onlineMembersList = [];
     var offlineMembersList = [];
@@ -236,9 +314,9 @@ class App extends React.Component {
     setTimeout(
       this.state.activeChatroom[2].map((member, index) => {
         if (onlineUsersIds.includes(member.id)) {
-          onlineMembersList.push(<MemberCard key={member.id} username={member.username} online={true} />)
+          onlineMembersList.push(<MemberCard key={member.id} username={member.username} online={true} handleMentionOnClick={this.handleMentionOnClick.bind(this, member.username)} />)
         } else {
-          offlineMembersList.push(<MemberCard key={member.id} username={member.username} online={false} />)
+          offlineMembersList.push(<MemberCard key={member.id} username={member.username} online={false} handleMentionOnClick={this.handleMentionOnClick.bind(this, member.username)} />)
         }
       }
     ), 1000)
@@ -266,7 +344,11 @@ class App extends React.Component {
           console.log('Connected to ChatroomSubscriptionsChannel')
         },
         received: (data) => {
-          this.setState({ chatrooms: data[0], activeChatroom: data[1] });
+          console.log(data)
+          this.setState({ chatrooms: data[0] });
+          if ((data.length === 3) && (data[2] === this.state.current_user.id)) {
+            this.setState({ activeChatroom: data[1] })
+          }
         }
       });
       // Chatrooms channel
@@ -276,6 +358,14 @@ class App extends React.Component {
         },
         received: (data) => {
           this.setState({ chatrooms: data })
+          var chatroomsIds = [];
+          this.state.chatrooms.map((chatroom, index) => {
+            chatroomsIds.push(chatroom[0].id)
+          });
+          if (!chatroomsIds.includes(this.state.activeChatroom[0].id)) {
+            this.setState({ activeChatroom: this.props.default_active_chatroom, activeChatroomMessages: this.props.default_active_chatroom[1] })
+            document.querySelector('.chatroom-middle').lastChild.scrollIntoView(true)
+          }
         }
       });
       // Users channel
@@ -301,6 +391,19 @@ class App extends React.Component {
           this.setState({ online_users: data })
         }
       });
+      // Notifications channel
+      cable.subscriptions.create('NotificationsChannel', {
+        connected: () => {
+          console.log('Connected to NotificationsChannel')
+        },
+        received: (data) => {
+          data.forEach((notification) => {
+            if (notification[2].id === this.state.current_user.id) {
+              this.setState({notifications: this.state.notifications.concat([notification])});
+            }
+          });
+        }
+      });
       // Scroll down to last message
       document.querySelector('.chatroom-middle').lastChild.scrollIntoView(true);
     }
@@ -321,10 +424,6 @@ class App extends React.Component {
         body: JSON.stringify(body)
       })
     }
-
-    // this.state.activeChatroomMessages.forEach((message) => {
-    //   console.log(message.body.includes('@' + this.state.current_user.username.toLowerCase()))
-    // });
 
     return (
       <div className='app-container flex'>
@@ -356,14 +455,34 @@ class App extends React.Component {
                     activeChatroom={this.state.activeChatroom}
                     displayForm={this.state.displayForm}
                     messages={this.state.activeChatroomMessages}
-                    current_user={this.state.current_user} />}
+                    current_user={this.state.current_user}
+                    noActiveChatroom={this.state.noActiveChatroom} />}
         {/* Right container */}
         <div className='right'>
           <div className='top'>
-
+            <div className='flex-end'>
+              <i className="fa fa-bell" onClick={this.displayNotifications.bind(this)}></i>
+              {this.displayNotificationsBadge()}
+            </div>
+              {this.state.displayNotifications &&
+                <div className='notifications-container'>
+                  {this.state.notifications.length === 0 &&
+                    <div className='flex-center'>
+                      <h6>No notifications... 🙄</h6>
+                    </div>
+                  }
+                  {this.state.notifications.length > 0 &&
+                    <div className='flex'>
+                      <h5 onClick={this.handleMarkAllAsRead.bind(this)}>Mark all as read</h5>
+                      <h5 onClick={this.handleClearAll.bind(this)}>Clear all</h5>
+                    </div>
+                  }
+                  {notificationsList}
+                </div>
+              }
           </div>
           <div className='flex members-header'>
-            <i className="fa fa-users" aria-hidden="true"></i>
+            <i className="fa fa-users"></i>
             <h3>Members</h3>
           </div>
           <div className='members-container'>

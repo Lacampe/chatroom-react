@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170916235944) do
+ActiveRecord::Schema.define(version: 20170922170352) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -44,6 +44,20 @@ ActiveRecord::Schema.define(version: 20170916235944) do
     t.index ["sender_id"], name: "index_messages_on_sender_id"
   end
 
+  create_table "notifications", force: :cascade do |t|
+    t.bigint "notifier_id"
+    t.bigint "notifiee_id"
+    t.boolean "read?"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "category"
+    t.bigint "chatroom_id"
+    t.boolean "cleared?", default: false
+    t.index ["chatroom_id"], name: "index_notifications_on_chatroom_id"
+    t.index ["notifiee_id"], name: "index_notifications_on_notifiee_id"
+    t.index ["notifier_id"], name: "index_notifications_on_notifier_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -68,4 +82,7 @@ ActiveRecord::Schema.define(version: 20170916235944) do
   add_foreign_key "chatrooms", "users", column: "creator_id"
   add_foreign_key "messages", "chatrooms"
   add_foreign_key "messages", "users", column: "sender_id"
+  add_foreign_key "notifications", "chatrooms"
+  add_foreign_key "notifications", "users", column: "notifiee_id"
+  add_foreign_key "notifications", "users", column: "notifier_id"
 end

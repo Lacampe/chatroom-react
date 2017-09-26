@@ -3,4 +3,5 @@ class Chatroom < ApplicationRecord
   has_many :messages, dependent: :destroy
   has_many :chatroom_subscriptions, dependent: :destroy
   has_many :members, through: :chatroom_subscriptions, source: :user
+  has_many :notifications, dependent: :destroy
 end

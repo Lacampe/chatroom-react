@@ -9,5 +9,12 @@ class PagesController < ApplicationController
       chatroom = current_user.chatrooms.first
       @default_active_chatroom = [chatroom, chatroom.messages, chatroom.members, chatroom.creator]
     end
+
+    @notifications = []
+    current_user.notifications.each do |notification|
+      if notification.cleared? == false
+        @notifications << [notification, User.find(notification.notifier_id), current_user, Chatroom.find(notification.chatroom_id), notification.category, notification.read?, notification.cleared?]
+      end
+    end
   end
 end

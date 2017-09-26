@@ -32,6 +32,15 @@
   padding: 25px 25px 25px 0;
   .top {
     height: 22%;
+    width: 90%;
+    margin: 0 auto;
+    position: relative;
+    i {
+      color: #464646;
+      height: 20px;
+      font-size: 20px;
+      &:hover {cursor: pointer}
+    }
   }
 }
 
@@ -127,6 +136,8 @@
 .members-container {
   height: 70%;
   width: 100%;
+  overflow: scroll;
+  overflow-x: hidden;
 }
 
 /* components */
@@ -316,6 +327,7 @@
     font-size: 15px;
     font-weight: 100;
     margin-left: 10px;
+    &:hover {cursor: pointer}
   }
   img {
     height: 17px;
@@ -333,6 +345,67 @@
   color: #B2B2B2;
   font-size: 18px;
   font-weight: 100;
+}
+
+.notification-badge {
+  height: 13px;
+  width: 13px;
+  border-radius: 50%;
+  background-color: #D64B5C;
+  position: absolute;
+  top: -1px;
+  right: -2px;
+  p {
+    color: white;
+    font-size: 6px;
+    font-weight: 300;
+  }
+}
+
+.notifications-container {
+  min-height: 35px;
+  max-height: 115px;
+  background-color: white;
+  margin-top: 10px;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 2px 4px 8px #D8D8D8;
+  overflow: scroll;
+  overflow-x: hidden;
+  h5 {
+    color: #CBCBCB;
+    font-size: 10px;
+    font-weight: 400;
+    &:hover {cursor: pointer}
+  }
+  h5:first-child:hover {color: #91DA86}
+  h5:last-child {
+    margin-left: 10px;
+    &:hover {color: #D64B5C}
+  }
+  h6 {
+    color: #464646;
+    font-size: 13px;
+    font-weight: 300;
+  }
+}
+
+.notification {
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid #E6E6E6;
+  p {
+    color: #464646;
+    font-size: 11px;
+    font-weight: 300;
+  }
+}
+.notification:first-child {
+  padding-top: 0;
+}
+.notification:last-child {
+  padding-bottom: 0;
+  border: none;
 }
 
 .search {

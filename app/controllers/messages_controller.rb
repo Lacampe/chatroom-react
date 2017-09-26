@@ -6,9 +6,20 @@ class MessagesController < ApplicationController
     new_message.chatroom = Chatroom.find(params[:chatroom_id])
     new_message.save
     props = [new_message.chatroom, new_message.chatroom.messages]
-    respond_to do |format|
-      format.json { render json: props }
+
+    notifications = []
+    new_message.body.scan(/@\w*/).each do |mention|
+      notifiee = User.find_by(username: mention[1..-1])
+      if notifiee
+        new_notification = Notification.create(notifier: current_user, notifiee: notifiee, chatroom: new_message.chatroom, category: 'mention', read?: false)
+        notifications << [new_notification, new_notification.notifier, new_notification.notifiee, new_notification.chatroom, new_notification.category, new_notification.read?, new_notification.cleared?]
+        ActionCable.server.broadcast(
+          'notifications',
+          notifications
+        )
+      end
     end
+
     ActionCable.server.broadcast(
       'messages',
       { id: new_message.id,
@@ -19,6 +30,9 @@ class MessagesController < ApplicationController
         created_at: new_message.created_at,
         updated_at: new_message.updated_at }
     )
+    respond_to do |format|
+      format.json { render json: props }
+    end
   end
 
   private

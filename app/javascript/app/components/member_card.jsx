@@ -8,7 +8,7 @@ class MemberCard extends React.Component {
       <div className='member-card flex'>
         <div className={isOnline}></div>
         <img src='user.png' />
-        <p>{'@' + this.props.username}</p>
+        <p onClick={this.props.handleMentionOnClick}>{'@' + this.props.username}</p>
       </div>
     )
   }

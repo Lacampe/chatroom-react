@@ -64,6 +64,11 @@ class Chatroom extends Component {
         </div>
       )
     } else {
+      if (this.props.noActiveChatroom) {
+        return (
+          <p>No active chatroom yet...👆👈</p>
+        )
+      } else {
       return (
         <div className='chatroom'>
           <div className='chatroom-top flex-between'>
@@ -102,6 +107,8 @@ class Chatroom extends Component {
           </div>
         </div>
       )
+      }
+
     }
   }
 

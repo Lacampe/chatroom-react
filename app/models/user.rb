@@ -8,5 +8,6 @@ class User < ApplicationRecord
   has_many :chatrooms, through: :chatroom_subscriptions
   has_many :owned_chatrooms, foreign_key: 'creator_id', class_name: 'Chatroom', dependent: :destroy
   has_many :sent_messages, foreign_key: 'sender_id', class_name: 'Message', dependent: :destroy
+  has_many :notifications, foreign_key: 'notifiee_id', class_name: 'Notification', dependent: :destroy
 
 end
